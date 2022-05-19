@@ -3,11 +3,16 @@ import java.awt.*;
 
 public class TileView extends JButton {
 
-    private Tile model;
+    private final Tile model;
 
     TileView(Tile m, Icon icon)
     {
         super(icon);
+
+        setHorizontalTextPosition(JButton.CENTER);
+        setVerticalTextPosition(JButton.CENTER);
+        setMargin(new Insets(0,0,0,0));
+
         model = m;
     }
 }

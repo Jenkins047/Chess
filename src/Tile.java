@@ -9,7 +9,7 @@ public class Tile{
 
         this.position = position;
 
-        if(position.x % 8 == position.y % 8)
+        if(this.position.x % 2 == this.position.y % 2)
             color = Color.BLACK;
         else
             color = Color.WHITE;
