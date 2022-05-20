@@ -15,4 +15,6 @@ public class TileView extends JButton {
 
         model = m;
     }
+
+    public Tile getTile() { return this.model; }
 }

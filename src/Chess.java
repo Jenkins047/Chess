@@ -8,20 +8,18 @@ import java.util.Set;
 
 public class Chess implements Runnable {
     private JFrame view;
-    private Board board;
-    private Player whitePlayer;
-    private Player blackPlayer;
+    private final Board board;
+    private Figure pickedFigure;
     private GameState state;
-    private Player activePlayer;
+    private ActivePlayer activePlayer;
     private final int frame_duration_ms;
 
     Chess()
     {
         board = new Board();
 
-        whitePlayer = new Player();
-        blackPlayer = new Player();
-        activePlayer = whitePlayer;
+        activePlayer = ActivePlayer.WHITE;
+        state = GameState.PLAYER_CHOOSE_FIGURE;
 
         frame_duration_ms = 25;
     }
@@ -37,59 +35,46 @@ public class Chess implements Runnable {
     public GameState getState() { return state; }
 
     public void goToNextState() {
-        switch(state)
+
+        try {
+            if(state.next() == GameState.PLAYER_CHOOSE_FIGURE)
+                activePlayer = activePlayer.next();
+
+            state = state.next();
+        }
+        catch(GameEndException e)
         {
-            case WHITE_PLAYER_CHOOSE_FIGURE:
-                state = GameState.WHITE_PLAYER_MOVE_FIGURE;
-                break;
-
-            case WHITE_PLAYER_MOVE_FIGURE:
-                state = GameState.BLACK_PLAYER_CHOOSE_FIGURE;
-                break;
-
-            case BLACK_PLAYER_CHOOSE_FIGURE:
-                state = GameState.BLACK_PLAYER_MOVE_FIGURE;
-                break;
-
-            case BLACK_PLAYER_MOVE_FIGURE:
-                state = GameState.WHITE_PLAYER_CHOOSE_FIGURE;
-                break;
-
-            case BLACK_SAYS_CHECK:
-                if(isCheckMate())
-                    state = GameState.CHECK_MATE;
-                else
-                    state = GameState.WHITE_PLAYER_CHOOSE_FIGURE;
-
-                break;
-
-            case WHITE_SAYS_CHECK:
-                if(isCheckMate())
-                    state = GameState.CHECK_MATE;
-                else
-                    state = GameState.BLACK_PLAYER_CHOOSE_FIGURE;
-
-                break;
-
-            default: state = state;
+            endGame();
         }
     }
 
-    public void PickFigure(TileView target) {
+    private void endGame() {
     }
 
-    public void moveFigure(TileView target) {
+    public void chooseFigure(Tile target) {
+        pickedFigure = board.getBoardState().get(target);
+        pickedFigure.getMoves(board.getBoardState());
     }
 
-    public void endGame() {
+    public void moveFigure(Tile target) {
+        if(board.getBoardState().get(target) == pickedFigure)
+        {
+            pickedFigure.clearMoves();
+            state = GameState.PLAYER_CHOOSE_FIGURE;
+        }
+        else
+        {
+            board.move(target, pickedFigure);
+            pickedFigure.clearMoves();
+            pickedFigure = null;
+        }
     }
-
-    public void setBoardView(BoardView v) { board.setView(v); }
 
     public Set<Tile> getTiles()
     {
         return board.getBoardState().keySet();
     }
+    public Figure getTileState(Tile t) { return board.getBoardState().get(t); }
 
     public void run() {
         while(!isCheckMate())
@@ -103,4 +88,6 @@ public class Chess implements Runnable {
             view.repaint();
         }
     }
+
+    public Figure getChosenFigure() { return pickedFigure; }
 }
