@@ -2,8 +2,8 @@ import java.awt.*;
 import java.util.LinkedHashMap;
 
 public class Board{
-    private BoardView view;
-    private LinkedHashMap<Tile, Figure> boardState;
+    private final LinkedHashMap<Tile, Figure> boardState;
+    private final Figure free = new EmptySpot();
 
     Board()
     {
@@ -18,7 +18,15 @@ public class Board{
         }
     }
 
-    public void setView(BoardView v) { view = v; }
+    public void move(Tile target, Figure figure)
+    {
+        for(Tile key: boardState.keySet())
+            if(boardState.get(key) == figure)
+                boardState.replace(key, free);
+
+        boardState.replace(target, figure);
+
+    }
 
     public LinkedHashMap<Tile, Figure> getBoardState(){ return boardState; }
 }
