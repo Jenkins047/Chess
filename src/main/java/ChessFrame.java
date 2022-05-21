@@ -12,7 +12,7 @@ public class ChessFrame extends JFrame {
         Chess model = new Chess();
         model.setView(this);
 
-        ChessControler controller = new ChessControler(model);
+        ChessController controller = new ChessController(model);
 
         BoardView board_view = new BoardView(controller, new GridLayout(8, 8));
 

@@ -5,9 +5,9 @@ import java.awt.event.ActionListener;
 
 public class BoardView extends JPanel implements ActionListener {
 
-    private final ChessControler controller;
+    private final ChessController controller;
 
-    BoardView(ChessControler controller, GridLayout gridLayout)
+    BoardView(ChessController controller, GridLayout gridLayout)
     {
         super(gridLayout);
         this.controller = controller;

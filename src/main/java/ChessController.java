@@ -2,11 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
 
-public class ChessControler {
+public class ChessController {
     private final Chess model;
     private BoardView view;
 
-    ChessControler(Chess model)
+    ChessController(Chess model)
     {
         this.model = model;
     }
