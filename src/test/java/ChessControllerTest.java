@@ -1,10 +1,7 @@
 import org.junit.jupiter.api.Test;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.beans.JavaBean;
-import java.util.Arrays;
 import java.util.Stack;
 
 import static org.junit.jupiter.api.Assertions.*;
