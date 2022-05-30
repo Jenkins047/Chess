@@ -15,15 +15,16 @@ public class ChessController {
     {
         switch (model.getState()) {
             case PLAYER_CHOOSE_FIGURE -> {
-                if (!Objects.equals(model.getTileState(target), new EmptySpot()))
+                if (!Objects.equals(model.getFigureOnTile(target), new EmptySpot()))
                     model.chooseFigure(target);
                 updateView();
             }
             case PLAYER_MOVE_FIGURE -> {
-                if (Objects.equals(model.getTileState(target), new EmptySpot()) ||
-                        model.getTileState(target).getColor() != model.getChosenFigure().getColor()
+                if (Objects.equals(model.getFigureOnTile(target), new EmptySpot()) ||
+                        model.getFigureOnTile(target).getColor() != model.getChosenFigure().getColor()
                 )
-                    model.moveFigure(target);
+                    //FIXME react accordingly to MoVeType
+                    model.moveFigure(new Move(MoveType.NORMAL, target));
                 updateView();
             }
         }
