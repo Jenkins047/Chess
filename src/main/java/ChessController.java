@@ -22,13 +22,14 @@ public class ChessController {
             }
             case PLAYER_MOVE_FIGURE -> {
                 FigureView currentFigureView = model.getChosenFigure().getView();
+                TileView targetView = model.getBoard().getTiles().get(target).getView();
+                FigureView targetFigureView = model.getBoard().getFigures().get(target).getView();
                 if(model.getLegalMoves().containsKey(target))
                 {
+                    model.moveFigure(model.getLegalMoves().get(target));
                     hideMoves();
                     model.clearMoves();
-
-                    //FIXME react accordingly to MoVeType
-                    model.moveFigure(new Move(MoveType.NORMAL, target));
+                    targetView.remove(targetFigureView);
                 }
                 displayFigure(model.getBoard().getTiles().get(target).getView(),
                         currentFigureView);
@@ -41,7 +42,6 @@ public class ChessController {
     private void hideMoves() {
         for(Move m: model.getLegalMoves().values())
         {
-            MoveView mv = new MoveView(m);
             Tile activeTile = model.getBoard().getTiles().get(m.destination);
             activeTile.setMarkerColor(model.getBoard().getTiles().get(m.destination).getColor());
             activeTile.getView().repaint();
@@ -66,12 +66,10 @@ public class ChessController {
     public void initView(BoardView board_view, FiguresView v) {
         view = board_view;
         figView = v;
-        Icon whiteTile = new ImageIcon("src/main/resources/img/white_tile.png");
-        Icon blackTile = new ImageIcon("src/main/resources/img/dark_tile.png");
         TileView handler;
         for(Point pt: model.getBoard().getTiles().keySet())
         {
-            handler = new TileView(model.getBoard().getTiles().get(pt), whiteTile);
+            handler = new TileView(model.getBoard().getTiles().get(pt));
             view.add(handler);
             model.getBoard().getTiles().get(pt).setView(handler);
             handler.addActionListener(view);

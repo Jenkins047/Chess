@@ -6,10 +6,8 @@ import java.util.Objects;
 public class TileView extends JButton {
 
     private final Tile model;
-    TileView(Tile m, Icon icon)
+    TileView(Tile m)
     {
-        super(icon);
-
         setHorizontalTextPosition(JButton.CENTER);
         setVerticalTextPosition(JButton.CENTER);
         setMargin(new Insets(0,0,0,0));
