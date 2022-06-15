@@ -77,7 +77,6 @@ public class Chess implements Runnable {
 
             case OFFENSIVE:
                 grave.bury(board.getFigures().get(move.destination).toString(), board.getFigures().get(move.destination));
-                board.getFigures().remove(move.destination);
                 board.move(move, pickedFigure);
                 pickedFigure = null;
                 System.out.println("Ilość figur na planszy: " + board.getFigures().size());
