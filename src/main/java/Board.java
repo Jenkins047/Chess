@@ -43,7 +43,7 @@ public class Board{
         }
 
         for(int x = 0; x < 8; x++)
-            figures.put((new Point(x, 6)), new Pawn(Color.WHITE, new Point(x, 7)));
+            figures.put((new Point(x, 6)), new Pawn(Color.WHITE, new Point(x, 6)));
 
         figures.put((new Point(0, 7)), new Tower(Color.WHITE, new Point(0, 7)));
         figures.put((new Point(1, 7)), new Knight(Color.WHITE, new Point(1, 7)));

@@ -16,8 +16,10 @@ public class ChessController {
     {
         switch (model.getState()) {
             case PLAYER_CHOOSE_FIGURE -> {
-                if (!Objects.equals(model.getFigureOnTile(target), Board.free))
+                if (!Objects.equals(model.getFigureOnTile(target), Board.free)) {
                     model.chooseFigure(target);
+                    model.goToNextState();
+                }
                 displayMoves();
             }
             case PLAYER_MOVE_FIGURE -> {
@@ -30,13 +32,13 @@ public class ChessController {
                     hideMoves();
                     model.clearMoves();
                     targetView.remove(targetFigureView);
+                    displayFigure(model.getBoard().getTiles().get(target).getView(),
+                            currentFigureView);
+                    model.goToNextState();
                 }
-                displayFigure(model.getBoard().getTiles().get(target).getView(),
-                        currentFigureView);
+
             }
         }
-
-        model.goToNextState();
     }
 
     private void hideMoves() {

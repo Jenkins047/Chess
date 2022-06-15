@@ -116,7 +116,7 @@ public class Chess implements Runnable {
 
         if(pickedFigure instanceof Pawn)
         {
-            if(pickedFigure.getPosition().y == 1){
+            if(pickedFigure.getPosition().y == 1 || pickedFigure.getPosition().y == 6){
                 if (board.getFigures().get(movesToCheck.peek().peek()) == Board.free) {
                     legalMoves.put(movesToCheck.peek().peek(), new Move(MoveType.NORMAL, movesToCheck.peek().peek()));
 
