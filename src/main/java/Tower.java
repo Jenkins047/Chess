@@ -1,67 +1,39 @@
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Set;
-import java.util.Vector;
+import java.util.*;
 
 public class Tower extends Figure{
-    Tower(Color color, HashMap<Tile, Figure> boardState) { super(color, boardState); }
+    Tower(Color color, Point p) { super(color, p); }
 
     //TODO implement getMoves
     @Override
-    public Set<Move> getMoves() {
-        //find chosen tile
-        Point position = null;
-        for(Tile element: boardState.keySet())
-            if(boardState.get(element) == this) {
-                position = element.getPosition();
-                break;
-            }
-        Vector<Move> moveList = new Vector<>();
+    public Stack<Stack<Point>> getMovesToCheck() {
+        
+        Stack<Point> posX = new Stack<>();
         //check +x coordinate
-        for(int x = position.x; x < 7 - position.x; x++)
-        {
-            if (Objects.equals(boardState.get(new Tile(new Point(position.x + x, position.y))), Board.free))
-                moveList.add(new Move(MoveType.NORMAL, new Tile(new Point(position.x + x, position.y))));
+        for(int x = getPosition().x + 1; x <= 7; x++)
+            posX.push(new Point(x, getPosition().y));
 
-            if (Objects.equals(boardState.get(new Tile(new Point(position.x + x, position.y))),
-                    boardState.get(new Tile(new Point(position.x + x, position.y))).getColor() != this.getColor()))
-                            moveList.add(new Move(MoveType.OFFENSIVE, new Tile(new Point(position.x + x, position.y))));
-        }
-
+        Stack<Point> negX = new Stack<>();
         //check -x coordinate
-        for(int x = position.x; x >= 0; x--)
-        {
-            if (Objects.equals(boardState.get(new Tile(new Point(position.x + x, position.y))), Board.free))
-                moveList.add(new Move(MoveType.NORMAL, new Tile(new Point(position.x + x, position.y))));
+        for(int x = getPosition().x - 1; x >= 0; x--)
+            negX.push(new Point(x, getPosition().y));
 
-            if (Objects.equals(boardState.get(new Tile(new Point(position.x + x, position.y))),
-                    boardState.get(new Tile(new Point(position.x + x, position.y))).getColor() != this.getColor()))
-                moveList.add(new Move(MoveType.OFFENSIVE, new Tile(new Point(position.x + x, position.y))));
-        }
-
+        Stack<Point> posY = new Stack<>();
         //check +y coordinate
-        for(int y = position.y; y >= 0; y--)
-        {
-            if (Objects.equals(boardState.get(new Tile(new Point(position.x, position.y + y))), Board.free))
-                moveList.add(new Move(MoveType.NORMAL, new Tile(new Point(position.x, position.y + y))));
+        for(int y = getPosition().y - 1; y >= 0; y--)
+            posY.push(new Point(getPosition().x, y));
 
-            if (Objects.equals(boardState.get(new Tile(new Point(position.x, position.y + y))),
-                    boardState.get(new Tile(new Point(position.x, position.y + y))).getColor() != this.getColor()))
-                moveList.add(new Move(MoveType.OFFENSIVE, new Tile(new Point(position.x, position.y + y))));
-        }
-
+        Stack<Point> negY = new Stack<>();
         //check -y coordinate
-        for(int y = position.y; y < 7; y++)
-        {
-            if (Objects.equals(boardState.get(new Tile(new Point(position.x, position.y + y))), Board.free))
-                moveList.add(new Move(MoveType.NORMAL, new Tile(new Point(position.x, position.y + y))));
+        for(int y = getPosition().y + 1; y <= 7; y++)
+            negY.push(new Point(getPosition().x, y));
 
-            if (Objects.equals(boardState.get(new Tile(new Point(position.x, position.y + y))),
-                    boardState.get(new Tile(new Point(position.x, position.y + y))).getColor() != this.getColor()))
-                moveList.add(new Move(MoveType.OFFENSIVE, new Tile(new Point(position.x, position.y + y))));
-        }
-
-        return Set.copyOf(moveList);
+        Stack<Stack<Point>> movesToCheck = new Stack<>();
+        movesToCheck.push(posX);
+        movesToCheck.push(negX);
+        movesToCheck.push(posY);
+        movesToCheck.push(negY);
+        
+        return movesToCheck;
     }
 }

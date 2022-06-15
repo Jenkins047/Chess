@@ -13,7 +13,8 @@ class ChessControllerTest {
         Chess model = new Chess();
         ChessController ctrl = new ChessController(model);
         BoardView testView = new BoardView(ctrl, new GridLayout(8, 8));
-        ctrl.initView(testView);
+        FiguresView figuresView = new FiguresView();
+        ctrl.initView(testView, figuresView);
 
         Stack<GameState> reachedStates = new Stack<>();
         reachedStates.push(model.getState());

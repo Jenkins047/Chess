@@ -1,14 +1,18 @@
+import java.awt.*;
 import java.util.Objects;
 
 public class Move {
     public MoveType moveType;
-    public Tile destination;
+    public Point destination;
 
-    Move(MoveType moveType, Tile destination)
+    Move(MoveType moveType, Point destination)
     {
         this.moveType = moveType;
         this.destination = destination;
     }
+
+    public MoveType getMoveType() { return moveType; }
+    public Point getDestination() { return destination; }
 
     @Override
     public boolean equals(Object o) {

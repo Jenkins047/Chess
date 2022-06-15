@@ -16,11 +16,7 @@ public class ChessFrame extends JFrame {
 
         BoardView board_view = new BoardView(controller, new GridLayout(8, 8));
 
-
-
         add(board_view, BorderLayout.CENTER);
-
-
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // Rozmieszcza komponenty "optymalnie",

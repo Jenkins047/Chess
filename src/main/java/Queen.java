@@ -1,111 +1,64 @@
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Set;
-import java.util.Vector;
+import java.util.*;
 
 public class Queen extends Figure{
-    Queen(Color color, HashMap<Tile, Figure> boardState) { super(color, boardState); }
+    Queen(Color color, Point p) { super(color, p); }
 
     //TODO implement getMoves
     @Override
-    public Set<Move> getMoves() {
-        //find chosen tile
-        Point position = null;
-        for(Tile element: boardState.keySet())
-            if(boardState.get(element) == this) {
-                position = element.getPosition();
-                break;
-            }
-        Vector<Move> moveList = new Vector<>();
+    public Stack<Stack<Point>> getMovesToCheck() {
+
+        Stack<Point> upRight = new Stack<>();
         //check up-right diagonal
-        for(int x = position.x, y = position.y; x < 7 && y >= 0; x++, y--)
-        {
-            if (Objects.equals(boardState.get(new Tile(new Point(position.x + x, position.y + y))), Board.free))
-                moveList.add(new Move(MoveType.NORMAL, new Tile(new Point(position.x + x, position.y + y))));
+        for(int x = getPosition().x + 1, y = getPosition().y - 1; x < 7 && y > 0; x++, y--)
+            upRight.push(new Point(x, y));
 
-            if (Objects.equals(boardState.get(new Tile(new Point(position.x + x, position.y + y))),
-                    boardState.get(new Tile(new Point(position.x + x, position.y + y))).getColor() != this.getColor()))
-                moveList.add(new Move(MoveType.OFFENSIVE, new Tile(new Point(position.x + x, position.y + y))));
-        }
-
+        Stack<Point> upLeft = new Stack<>();
         //check up-left diagonal
-        for(int x = position.x, y = position.y; x >= 0 && y >= 0; x--, y--)
-        {
-            if (Objects.equals(boardState.get(new Tile(new Point(position.x + x, position.y + y))), Board.free))
-                moveList.add(new Move(MoveType.NORMAL, new Tile(new Point(position.x + x, position.y + y))));
+        for(int x = getPosition().x - 1, y = getPosition().y - 1; x > 0 && y > 0; x--, y--)
+            upLeft.push(new Point(x, y));
 
-            if (Objects.equals(boardState.get(new Tile(new Point(position.x + x, position.y + y))),
-                    boardState.get(new Tile(new Point(position.x + x, position.y + y))).getColor() != this.getColor()))
-                moveList.add(new Move(MoveType.OFFENSIVE, new Tile(new Point(position.x + x, position.y + y))));
-        }
-
+        Stack<Point> downRight = new Stack<>();
         //check down-right diagonal
-        for(int x = position.x, y = position.y; x < 7 && y < 7; x++, y++)
-        {
-            if (Objects.equals(boardState.get(new Tile(new Point(position.x + x, position.y + y))), Board.free))
-                moveList.add(new Move(MoveType.NORMAL, new Tile(new Point(position.x + x, position.y + y))));
+        for(int x = getPosition().x + 1, y = getPosition().y + 1; x <= 7 && y < 7; x++, y++)
+            downRight.push(new Point(x, y));
 
-            if (Objects.equals(boardState.get(new Tile(new Point(position.x + x, position.y + y))),
-                    boardState.get(new Tile(new Point(position.x + x, position.y + y))).getColor() != this.getColor()))
-                moveList.add(new Move(MoveType.OFFENSIVE, new Tile(new Point(position.x + x, position.y + y))));
-        }
-
+        Stack<Point> downLeft = new Stack<>();
         //check down-left diagonal
-        for(int x = position.x, y = position.y; x >= 0 && y < 7; x--, y++)
-        {
-            if (Objects.equals(boardState.get(new Tile(new Point(position.x + x, position.y + y))), Board.free))
-                moveList.add(new Move(MoveType.NORMAL, new Tile(new Point(position.x + x, position.y + y))));
+        for(int x = getPosition().x - 1, y = getPosition().y + 1; x >= 0 && y < 7; x--, y++)
+            downLeft.push(new Point(x, y));
 
-            if (Objects.equals(boardState.get(new Tile(new Point(position.x + x, position.y + y))),
-                    boardState.get(new Tile(new Point(position.x + x, position.y + y))).getColor() != this.getColor()))
-                moveList.add(new Move(MoveType.OFFENSIVE, new Tile(new Point(position.x + x, position.y + y))));
-        }
-
+        Stack<Point> posX = new Stack<>();
         //check +x coordinate
-        for(int x = position.x; x < 7 - position.x; x++)
-        {
-            if (Objects.equals(boardState.get(new Tile(new Point(position.x + x, position.y))), Board.free))
-                moveList.add(new Move(MoveType.NORMAL, new Tile(new Point(position.x + x, position.y))));
+        for(int x = getPosition().x + 1; x <= 7; x++)
+            posX.push(new Point(x, getPosition().y));
 
-            if (Objects.equals(boardState.get(new Tile(new Point(position.x + x, position.y))),
-                    boardState.get(new Tile(new Point(position.x + x, position.y))).getColor() != this.getColor()))
-                moveList.add(new Move(MoveType.OFFENSIVE, new Tile(new Point(position.x + x, position.y))));
-        }
-
+        Stack<Point> negX = new Stack<>();
         //check -x coordinate
-        for(int x = position.x; x >= 0; x--)
-        {
-            if (Objects.equals(boardState.get(new Tile(new Point(position.x + x, position.y))), Board.free))
-                moveList.add(new Move(MoveType.NORMAL, new Tile(new Point(position.x + x, position.y))));
+        for(int x = getPosition().x - 1; x >= 0; x--)
+            negX.push(new Point(x, getPosition().y));
 
-            if (Objects.equals(boardState.get(new Tile(new Point(position.x + x, position.y))),
-                    boardState.get(new Tile(new Point(position.x + x, position.y))).getColor() != this.getColor()))
-                moveList.add(new Move(MoveType.OFFENSIVE, new Tile(new Point(position.x + x, position.y))));
-        }
-
+        Stack<Point> posY = new Stack<>();
         //check +y coordinate
-        for(int y = position.y; y >= 0; y--)
-        {
-            if (Objects.equals(boardState.get(new Tile(new Point(position.x, position.y + y))), Board.free))
-                moveList.add(new Move(MoveType.NORMAL, new Tile(new Point(position.x, position.y + y))));
+        for(int y = getPosition().y - 1; y >= 0; y--)
+            posY.push(new Point(getPosition().x, y));
 
-            if (Objects.equals(boardState.get(new Tile(new Point(position.x, position.y + y))),
-                    boardState.get(new Tile(new Point(position.x, position.y + y))).getColor() != this.getColor()))
-                moveList.add(new Move(MoveType.OFFENSIVE, new Tile(new Point(position.x, position.y + y))));
-        }
-
+        Stack<Point> negY = new Stack<>();
         //check -y coordinate
-        for(int y = position.y; y < 7; y++)
-        {
-            if (Objects.equals(boardState.get(new Tile(new Point(position.x, position.y + y))), Board.free))
-                moveList.add(new Move(MoveType.NORMAL, new Tile(new Point(position.x, position.y + y))));
+        for(int y = getPosition().y + 1; y <= 7; y++)
+            negY.push(new Point(getPosition().x, y));
 
-            if (Objects.equals(boardState.get(new Tile(new Point(position.x, position.y + y))),
-                    boardState.get(new Tile(new Point(position.x, position.y + y))).getColor() != this.getColor()))
-                moveList.add(new Move(MoveType.OFFENSIVE, new Tile(new Point(position.x, position.y + y))));
-        }
 
-        return Set.copyOf(moveList);
+        Stack<Stack<Point>> pointsToCheck = new Stack<>();
+        pointsToCheck.push(upRight);
+        pointsToCheck.push(upLeft);
+        pointsToCheck.push(downRight);
+        pointsToCheck.push(downLeft);
+        pointsToCheck.push(posX);
+        pointsToCheck.push(negX);
+        pointsToCheck.push(posY);
+        pointsToCheck.push(negY);
+
+        return pointsToCheck;
     }
 }

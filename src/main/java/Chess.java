@@ -1,5 +1,7 @@
 import javax.swing.*;
-import java.util.Set;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Stack;
 
 /**
 *   Klasa nadrzędna, w której modyfikowany jest stan gry,
@@ -11,7 +13,7 @@ public class Chess implements Runnable {
     private JFrame view;
     private final Board board;
     private Figure pickedFigure;
-    private Set<Move> legalMoves;
+    private HashMap<Point, Move> legalMoves = new HashMap<>();
     private GameState state;
     private ActivePlayer activePlayer;
     private final int frame_duration_ms;
@@ -32,7 +34,7 @@ public class Chess implements Runnable {
         return false;
     }
 
-    private void clearMoves() { legalMoves = Set.of(); }
+    public void clearMoves() { legalMoves.clear(); }
 
     public void setView(JFrame v) { view = v; }
 
@@ -58,25 +60,17 @@ public class Chess implements Runnable {
     private void endGame() {
     }
 
-    public void chooseFigure(Tile target) {
-        pickedFigure = board.getBoardState().get(target);
-        legalMoves = pickedFigure.getMoves();
+    public void chooseFigure(Point target) {
+        pickedFigure = board.getFigures().get(target);
+        computeLegalMoves();
     }
 
     public void moveFigure(Move move) {
-        if(pickedFigure.getMoves().contains(move)) {
-            board.move(move, pickedFigure);
-            clearMoves();
-            pickedFigure = null;
-        }
-
+        board.move(move, pickedFigure);
+        pickedFigure = null;
     }
 
-    public Set<Tile> getTiles()
-    {
-        return board.getBoardState().keySet();
-    }
-    public Figure getFigureOnTile(Tile t) { return board.getBoardState().get(t); }
+    public Figure getFigureOnTile(Point t) { return board.getFigures().get(t); }
 
     public void run() {
         while(!isCheckMate())
@@ -93,12 +87,67 @@ public class Chess implements Runnable {
 
     public Figure getChosenFigure() { return pickedFigure; }
 
+    public Board getBoard() { return board; }
+
     public ActivePlayer getActivePlayer() { return this.activePlayer; }
 
-    public Set<Move> getLegalMoves() {
-        if(legalMoves != null)
-            return legalMoves;
-        else
-            return Set.of();
+    private void computeLegalMoves() {
+        Stack<Stack<Point>> movesToCheck = pickedFigure.getMovesToCheck();
+
+
+        if(pickedFigure instanceof Pawn)
+        {
+            if(pickedFigure.getPosition().y == 1){
+                if (board.getFigures().get(movesToCheck.peek().peek()) == Board.free) {
+                    legalMoves.put(movesToCheck.peek().peek(), new Move(MoveType.NORMAL, movesToCheck.peek().peek()));
+
+                }movesToCheck.peek().pop();
+            }
+
+            if (    !movesToCheck.peek().empty() &&
+                    board.getFigures().get(movesToCheck.peek().peek()) == Board.free) {
+                legalMoves.put(movesToCheck.peek().peek(), new Move(MoveType.NORMAL, movesToCheck.peek().peek()));
+
+            }
+            if(!movesToCheck.peek().empty())
+                movesToCheck.peek().pop();
+
+            if (    !movesToCheck.peek().empty() &&
+                    board.getFigures().get(movesToCheck.peek().peek()) != Board.free &&
+                    board.getFigures().get(movesToCheck.peek().peek()).getColor() != pickedFigure.getColor()) {
+                legalMoves.put(movesToCheck.peek().peek(), new Move(MoveType.OFFENSIVE, movesToCheck.peek().peek()));
+
+            }
+            if(!movesToCheck.peek().empty())
+                movesToCheck.peek().pop();
+
+            if (    !movesToCheck.peek().empty() &&
+                    board.getFigures().get(movesToCheck.peek().peek()) != Board.free &&
+                    board.getFigures().get(movesToCheck.peek().peek()).getColor() != pickedFigure.getColor()) {
+                legalMoves.put(movesToCheck.peek().peek(), new Move(MoveType.OFFENSIVE, movesToCheck.peek().peek()));
+
+            }
+            if(!movesToCheck.peek().empty())
+                movesToCheck.peek().pop();
+
+        }
+        else {
+            for (Stack<Point> stack : movesToCheck) {
+                for(Point pt: stack) {
+                    if (board.getFigures().get(pt) instanceof EmptySpot)
+                        legalMoves.put(pt, new Move(MoveType.NORMAL, pt));
+                    else if (board.getFigures().get(pt).getColor() != pickedFigure.getColor()) {
+                        legalMoves.put(pt, new Move(MoveType.OFFENSIVE, pt));
+                        break;
+                    }
+                    else if(!(pickedFigure instanceof Knight))
+                        break;
+                }
+            }
+        }
+    }
+
+    public HashMap<Point, Move> getLegalMoves() {
+        return legalMoves;
     }
 }

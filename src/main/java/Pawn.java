@@ -1,47 +1,27 @@
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Set;
-import java.util.Vector;
+import java.util.*;
 
 public class Pawn extends Figure{
-    Pawn(Color color, HashMap<Tile, Figure> boardState) { super(color, boardState); }
+    Pawn(Color color, Point p) { super(color, p); }
 
-    //TODO implement getMoves
     @Override
-    public Set<Move> getMoves() {
+    public Stack<Stack<Point>> getMovesToCheck() {
+        Stack<Point> ptToCheck = new Stack<>();
 
-        //find chosen tile
-        Point position = null;
-        for(Tile element: boardState.keySet())
-            if(boardState.get(element) == this) {
-                position = element.getPosition();
-                break;
-            }
+        if(this.getPosition().x + 1 <= 7 && this.getPosition().y + 1 <= 7)
+            ptToCheck.push(new Point(this.getPosition().x + 1, this.getPosition().y + 1));
 
-        Vector<Move> moveList = new Vector<>();
-        
-        //Check for forward motion
-        if(position.y == 1) {
-            if (Objects.equals(boardState.get(new Tile(new Point(position.x, position.y + 1))), Board.free))
-                moveList.add(new Move(MoveType.NORMAL, new Tile(new Point(position.x, position.y + 1))));
+        if(this.getPosition().x - 1 >= 0 && this.getPosition().y <= 7)
+            ptToCheck.push(new Point(this.getPosition().x - 1, this.getPosition().y + 1));
 
-            if (Objects.equals(boardState.get(new Tile(new Point(position.x, position.y + 2))), Board.free))
-                moveList.add(new Move(MoveType.NORMAL, new Tile(new Point(position.x, position.y + 2))));
-        }
-        else if (Objects.equals(boardState.get(new Tile(new Point(position.x, position.y + 1))), Board.free) &&
-                position.y != 7)
-                moveList.add(new Move(MoveType.NORMAL, new Tile(new Point(position.x, position.y + 1))));
-        else if (Objects.equals(boardState.get(new Tile(new Point(position.x, position.y + 1))), Board.free))
-                moveList.add(new Move(MoveType.SPECIAL, new Tile(new Point(position.x, position.y + 1))));
-        
-        //Check for offensive moves
-        if (!Objects.equals(boardState.get(new Tile(new Point(position.x + 1, position.y + 1))), Board.free))
-            moveList.add(new Move(MoveType.OFFENSIVE, new Tile(new Point(position.x, position.y + 1))));
+        if(this.getPosition().y + 1 <= 7)
+            ptToCheck.push(new Point(this.getPosition().x, this.getPosition().y + 1));
 
-        if (!Objects.equals(boardState.get(new Tile(new Point(position.x - 1, position.y + 1))), Board.free))
-            moveList.add(new Move(MoveType.OFFENSIVE, new Tile(new Point(position.x, position.y + 1))));
+        if(this.getPosition().y == 1)
+            ptToCheck.push(new Point(this.getPosition().x, this.getPosition().y + 2));
 
-        return Set.copyOf(moveList);
+        Stack<Stack<Point>> ans = new Stack<>();
+        ans.push(ptToCheck);
+        return ans;
     }
 }
