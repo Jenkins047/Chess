@@ -1,10 +1,10 @@
 import java.awt.*;
 
-public class Main {
+public class ChessMain {
     public static void main(String args[])
     {
         EventQueue.invokeLater(() -> {
-            new Chess("Szachy PROO");
+            new ChessFrame("Szachy PROO");
         });
     }
 }

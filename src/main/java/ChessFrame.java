@@ -1,18 +1,22 @@
 import javax.swing.*;
+import java.awt.*;
 
-//Główny widok
-public class Chess extends JFrame {
-    private Board board;
-    private BoardView view;
-    Chess(String title)
+public class ChessFrame extends JFrame {
+
+
+    ChessFrame(String title)
     {
         super(title);
-        board = new Board();
-        board.setView(this);
 
-        view = new BoardView(board);
 
-        add(view);
+        Chess model = new Chess();
+        model.setView(this);
+
+        ChessController controller = new ChessController(model);
+
+        BoardView board_view = new BoardView(controller, new GridLayout(8, 8));
+
+        add(board_view, BorderLayout.CENTER);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // Rozmieszcza komponenty "optymalnie",
@@ -25,6 +29,6 @@ public class Chess extends JFrame {
         // Dopiero w tym momencie okno jest wyświetlane.
         setVisible(true);
 
-        new Thread(board).start();
+        new Thread(model).start();
     }
 }
