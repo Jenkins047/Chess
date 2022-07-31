@@ -16,7 +16,8 @@ public class ChessController {
     {
         switch (model.getState()) {
             case PLAYER_CHOOSE_FIGURE -> {
-                if (!Objects.equals(model.getFigureOnTile(target), Board.free)) {
+                if (!Objects.equals(model.getFigureOnTile(target), Board.free) &&
+                        model.getFigureOnTile(target).getColor() ==  model.getActivePlayer().getColor()) {
                     model.chooseFigure(target);
                     model.goToNextState();
                 }
@@ -26,8 +27,7 @@ public class ChessController {
                 FigureView currentFigureView = model.getChosenFigure().getView();
                 TileView targetView = model.getBoard().getTiles().get(target).getView();
                 FigureView targetFigureView = model.getBoard().getFigures().get(target).getView();
-                if(model.getLegalMoves().containsKey(target))
-                {
+                if(model.getLegalMoves().containsKey(target)) {
                     model.moveFigure(model.getLegalMoves().get(target));
                     hideMoves();
                     model.clearMoves();

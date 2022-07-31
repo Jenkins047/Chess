@@ -25,7 +25,7 @@ public class Chess implements Runnable {
         board = new Board();
         grave = new Grave();
 
-        activePlayer = ActivePlayer.WHITE;
+        activePlayer = new ActivePlayer();
         state = GameState.PLAYER_CHOOSE_FIGURE;
 
         frame_duration_ms = 25;
@@ -47,7 +47,7 @@ public class Chess implements Runnable {
 
         try {
             if(state.next() == GameState.PLAYER_CHOOSE_FIGURE)
-                activePlayer = activePlayer.next();
+                activePlayer.updateActivePlayer();
 
             state = state.next();
         }
@@ -182,4 +182,5 @@ public class Chess implements Runnable {
     public HashMap<Point, Move> getLegalMoves() {
         return legalMoves;
     }
+    public void updateActivePlayer() { activePlayer.updateActivePlayer(); }
 }

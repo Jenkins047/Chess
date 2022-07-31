@@ -1,13 +1,22 @@
-public enum ActivePlayer {
-    BLACK,
-    WHITE {
-        @Override
-        public ActivePlayer next(){
-            return values()[0];
-        }
-    };
+import java.awt.Color;
 
-    public ActivePlayer next(){
-        return values()[ordinal() + 1];
+public class ActivePlayer {
+    private Color color;
+
+    ActivePlayer()
+    {
+        color = Color.WHITE;
+    }
+    public void updateActivePlayer()
+    {
+        if(color == Color.BLACK)
+            color = Color.WHITE;
+        else
+            color = Color.BLACK;
+    }
+
+    public Color getColor()
+    {
+        return color;
     }
 }
