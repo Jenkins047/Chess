@@ -20,12 +20,12 @@ public class Bishop extends Figure{
 
         Stack<Point> downRight = new Stack<>();
         //check down-right diagonal
-        for(int x = getPosition().x + 1, y = getPosition().y + 1; x <= 7 && y < 7; x++, y++)
+        for(int x = getPosition().x + 1, y = getPosition().y + 1; x <= 7 && y <= 7; x++, y++)
             downRight.push(new Point(x, y));
 
         Stack<Point> downLeft = new Stack<>();
         //check down-left diagonal
-        for(int x = getPosition().x - 1, y = getPosition().y + 1; x >= 0 && y < 7; x--, y++)
+        for(int x = getPosition().x - 1, y = getPosition().y + 1; x >= 0 && y <= 7; x--, y++)
             downLeft.push(new Point(x, y));
 
 

@@ -10,22 +10,22 @@ public class Queen extends Figure{
 
         Stack<Point> upRight = new Stack<>();
         //check up-right diagonal
-        for(int x = getPosition().x + 1, y = getPosition().y - 1; x < 7 && y > 0; x++, y--)
+        for(int x = getPosition().x + 1, y = getPosition().y - 1; x <= 7 && y >= 0; x++, y--)
             upRight.push(new Point(x, y));
 
         Stack<Point> upLeft = new Stack<>();
         //check up-left diagonal
-        for(int x = getPosition().x - 1, y = getPosition().y - 1; x > 0 && y > 0; x--, y--)
+        for(int x = getPosition().x - 1, y = getPosition().y - 1; x >= 0 && y >= 0; x--, y--)
             upLeft.push(new Point(x, y));
 
         Stack<Point> downRight = new Stack<>();
         //check down-right diagonal
-        for(int x = getPosition().x + 1, y = getPosition().y + 1; x <= 7 && y < 7; x++, y++)
+        for(int x = getPosition().x + 1, y = getPosition().y + 1; x <= 7 && y <= 7; x++, y++)
             downRight.push(new Point(x, y));
 
         Stack<Point> downLeft = new Stack<>();
         //check down-left diagonal
-        for(int x = getPosition().x - 1, y = getPosition().y + 1; x >= 0 && y < 7; x--, y++)
+        for(int x = getPosition().x - 1, y = getPosition().y + 1; x >= 0 && y <= 7; x--, y++)
             downLeft.push(new Point(x, y));
 
         Stack<Point> posX = new Stack<>();
