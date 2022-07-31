@@ -4,7 +4,6 @@ import java.util.*;
 public class King extends Figure{
     King(Color color, Point p) { super(color, p); }
 
-    //TODO implement getMoves
     @Override
     public Stack<Stack<Point>> getMovesToCheck() {
 
