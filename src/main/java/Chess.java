@@ -153,14 +153,27 @@ public class Chess implements Runnable {
         else {
             for (Stack<Point> stack : movesToCheck) {
                 for(Point pt: stack) {
-                    if (board.getFigures().get(pt) instanceof EmptySpot)
+                    if(board.getFigures().get(pt) == null) {
+                        if (pickedFigure instanceof Knight)
+                            continue;
+                        else
+                            break;
+                    }
+                    else if (board.getFigures().get(pt) instanceof EmptySpot)
                         legalMoves.put(pt, new Move(MoveType.NORMAL, pt));
                     else if (board.getFigures().get(pt).getColor() != pickedFigure.getColor()) {
                         legalMoves.put(pt, new Move(MoveType.OFFENSIVE, pt));
-                        break;
+                        if(pickedFigure instanceof Knight)
+                            continue;
+                        else
+                            break;
                     }
-                    else if(!(pickedFigure instanceof Knight))
-                        break;
+                    else if(!(pickedFigure instanceof Knight)) {
+                        if (pickedFigure instanceof Knight)
+                            continue;
+                        else
+                            break;
+                    }
                 }
             }
         }
